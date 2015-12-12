@@ -3,65 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcherchi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/26 10:08:16 by hcherchi          #+#    #+#             */
-/*   Updated: 2015/11/30 19:46:07 by hcherchi         ###   ########.fr       */
+/*   Created: 2015/11/26 10:47:10 by bgantelm          #+#    #+#             */
+/*   Updated: 2015/11/30 12:22:37 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_lennbr(int nbr)
+static int		ft_neg(int n)
 {
-	int c;
+	int	neg;
 
-	c = 0;
-	if (nbr == 0)
-		return (1);
-	if (nbr < 0)
-		c++;
-	while (nbr != 0)
-	{
-		nbr = nbr / 10;
-		c++;
-	}
-	return (c);
+	neg = 0;
+	if (n < 0)
+		neg = 1;
+	else
+		neg = 0;
+	return (neg);
 }
 
-static int	ft_signe(int *pn)
+static	int		ft_lennbr(int n)
 {
-	if (*pn < 0)
+	int	count;
+	int	nb;
+
+	count = 0;
+	if (n < 0)
 	{
-		*pn = -1 * (*pn);
-		return (1);
+		nb = -n;
+		count++;
 	}
 	else
-		return (0);
+		nb = n;
+	while (nb > 0)
+	{
+		nb = nb / 10;
+		count++;
+	}
+	return (count);
 }
 
-char		*ft_itoa(int nbr)
+static	char	*ft_itoa2(int n, char *res, int len, int neg)
 {
-	char	*nombre;
-	int		i;
-	int		signe;
-
-	i = ft_lennbr(nbr);
-	nombre = (char *)malloc(sizeof(*nombre) * i + 1);
-	if (nbr == -2147483648)
-		return (ft_strcpy(nombre, "-2147483648"));
-	signe = ft_signe(&nbr);
-	nombre[i] = '\0';
-	i--;
-	if (nbr == 0)
-		nombre[i] = '0';
-	while (nbr != 0)
+	while (neg == 0 && n > 0)
 	{
-		nombre[i] = (nbr % 10) + 48;
-		nbr = nbr / 10;
-		i--;
+		res[len] = (n % 10) + '0';
+		n = (n / 10);
+		len--;
 	}
-	if (signe == 1)
-		nombre[i] = '-';
-	return (nombre);
+	if (neg == 1)
+	{
+		n = -n;
+		while (neg == 1 && n > 0)
+		{
+			res[len] = (n % 10) + '0';
+			n = (n / 10);
+			len--;
+		}
+		res[len] = '-';
+	}
+	return (res);
+}
+
+char			*ft_itoa(int n)
+{
+	int		neg;
+	char	*res;
+	int		len;
+
+	len = ft_lennbr(n);
+	neg = ft_neg(n);
+	res = NULL;
+	res = (char *)malloc(sizeof(char) * (len + neg + 1));
+	if (n <= -2147483648)
+	{
+		res = ft_strcpy(res, "-2147483648");
+		return (res);
+	}
+	res[len] = '\0';
+	len--;
+	if (n == 0)
+		res[0] = 0 + '0';
+	ft_itoa2(n, res, len, neg);
+	return (res);
 }

@@ -3,36 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcherchi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 20:17:44 by hcherchi          #+#    #+#             */
-/*   Updated: 2015/11/28 23:13:19 by hcherchi         ###   ########.fr       */
+/*   Created: 2015/11/24 15:27:12 by bgantelm          #+#    #+#             */
+/*   Updated: 2015/11/27 16:33:24 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *nbr)
+int	ft_atoi(const char *str)
 {
-	int i;
-	int n;
-	int signe;
+	int				number;
+	int				neg;
 
-	i = 0;
-	n = 0;
-	signe = 1;
-	while (nbr[i] == ' ' || nbr[i] == '\n' || nbr[i] == '\r'
-	|| nbr[i] == '\t' || nbr[i] == '\f' || nbr[i] == '\v')
-		i++;
-	if (nbr[i] == '-')
-		signe = -1;
-	if (nbr[i] == '-' || nbr[i] == '+')
-		i++;
-	while (ft_isdigit(nbr[i]) == 1)
+	number = 0;
+	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\v'
+	|| *str == '\f' || *str == '\r')
+		str++;
+	if (!str)
+		return (0);
+	neg = 0;
+	if (*str == '-' || *str == '+')
 	{
-		n = n * 10;
-		n = n + nbr[i] - 48;
-		i++;
+		if (*str == '-')
+			neg = 1;
+		str++;
 	}
-	return (n * signe);
+	while (*str >= 48 && *str <= 57)
+	{
+		number = (number * 10) + ((int)*str - 48);
+		str++;
+	}
+	if (neg == 1)
+		number = -number;
+	return (number);
 }

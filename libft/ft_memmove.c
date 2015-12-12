@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcherchi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/26 14:44:16 by hcherchi          #+#    #+#             */
-/*   Updated: 2015/11/30 14:52:42 by hcherchi         ###   ########.fr       */
+/*   Created: 2015/11/25 16:58:38 by bgantelm          #+#    #+#             */
+/*   Updated: 2015/11/27 14:25:12 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, void const *src, size_t len)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*psrc;
-	char	*pdst;
-	char	*ptemp;
-	size_t	i;
+	unsigned char	*s;
 
-	i = 0;
-	pdst = (char *)dst;
-	psrc = (char *)src;
-	ptemp = (char *)ft_memcpy((void *)ft_strdup((const char *)dst), src, len);
-	while (i < len)
-	{
-		pdst[i] = ptemp[i];
-		i++;
-	}
+	if (dst == '\0' || src == '\0')
+		return (NULL);
+	s = (unsigned char*)malloc(sizeof(*s) * len);
+	ft_memcpy(s, src, len);
+	ft_memcpy(dst, s, len);
+	free(s);
 	return (dst);
 }

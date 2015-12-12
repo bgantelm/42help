@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcherchi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/26 14:44:16 by hcherchi          #+#    #+#             */
-/*   Updated: 2015/11/28 23:12:51 by hcherchi         ###   ########.fr       */
+/*   Created: 2015/11/25 12:50:51 by bgantelm          #+#    #+#             */
+/*   Updated: 2015/11/27 16:09:39 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memccpy(void *dst, void const *src, int c, size_t n)
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 {
-	char			*pdst;
-	char			*psrc;
-	unsigned char	pc;
-	size_t			i;
+	unsigned char	*i1;
+	unsigned char	*i2;
 
-	i = 0;
-	pc = (unsigned char)c;
-	pdst = (char *)dst;
-	psrc = (char *)src;
-	if (n != 0)
+	if (dst && src)
 	{
-		while (i < n)
+		i1 = (unsigned char *)dst;
+		i2 = (unsigned char *)src;
+		while (n > 0)
 		{
-			pdst[i] = psrc[i];
-			if (psrc[i] == c)
-				return (&dst[i + 1]);
-			i++;
+			*i1 = *i2;
+			if (*i2 == (unsigned char)c)
+				return ((void *)(i1 + 1));
+			i1++;
+			i2++;
+			n--;
 		}
 	}
 	return (NULL);

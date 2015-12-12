@@ -3,76 +3,86 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hcherchi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/28 18:38:18 by hcherchi          #+#    #+#             */
-/*   Updated: 2015/11/30 11:42:00 by hcherchi         ###   ########.fr       */
+/*   Created: 2015/11/26 14:58:49 by bgantelm          #+#    #+#             */
+/*   Updated: 2015/11/30 12:07:26 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_nbwords(char const *str, char c)
+static int		ft_word(char const *s, char c)
 {
-	int		count;
-	int		i;
+	int	v;
+	int	i;
 
+	v = 0;
 	i = 0;
-	count = 0;
-	while (str[i] != '\0')
+	while (*s)
 	{
-		while (str[i] == c)
-			i++;
-		if (str[i] == '\0')
-			return (count);
-		while (str[i] != c && str[i] != '\0')
-			i++;
-		count++;
+		if (*s != c && i == 0)
+		{
+			i = 1;
+			v++;
+		}
+		else if (i == 1 && *s == c)
+		{
+			i = 0;
+		}
+		s++;
 	}
-	return (count);
+	return (v);
 }
 
-static int	ft_wordsize(char const *str, char c)
+static size_t	nb_letter(const char *s, char c)
 {
-	int size;
-	int i;
+	size_t	nbletter;
 
-	i = 0;
-	size = 0;
-	while (str[i] == c)
-		i++;
-	while (str[i] != c && str[i] != '\0')
+	nbletter = 0;
+	while (*s)
 	{
-		i++;
-		size++;
+		while (*s == c)
+		{
+			s++;
+		}
+		while (*s != c && *s != '\0')
+		{
+			s++;
+			nbletter++;
+			if (*s == c)
+				return (nbletter);
+		}
+		s++;
 	}
-	return (size);
+	return (0);
 }
 
-char		**ft_strsplit(char const *str, char c)
+char			**ft_strsplit(char const *s, char c)
 {
-	char	**split;
 	int		i;
-	int		nbcur;
-	int		nbrest;
+	int		word;
+	char	**array;
+	int		nb;
 
-	if (str == NULL)
-		return (NULL);
-	nbcur = 0;
-	nbrest = ft_nbwords(str, c);
+	nb = 0;
 	i = 0;
-	split = (char **)malloc(sizeof(*split) * nbrest + 1);
-	if (split == NULL)
+	if (s == NULL)
 		return (NULL);
-	while (nbrest > 0)
+	word = ft_word(s, c);
+	array = (char **)malloc(sizeof(char *) * (word + 1));
+	if (array == NULL)
+		return (NULL);
+	while (word > 0)
 	{
-		while (*str == c)
-			str++;
-		split[nbcur] = ft_strsub(str, i, ft_wordsize(str, c));
-		str = str + ft_wordsize(str, c);
-		nbcur++;
-		nbrest--;
+		while (s[i] == c)
+			i++;
+		array[nb] = ft_strsub(s, i, nb_letter(s, c));
+		s = s + i + nb_letter(s, c);
+		nb++;
+		i = 0;
+		word--;
 	}
-	split[nbcur] = NULL;
-	return (split);
+	array[nb] = NULL;
+	return (array);
 }
