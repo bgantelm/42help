@@ -6,7 +6,7 @@
 /*   By: bgantelm <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/04 12:13:10 by bgantelm          #+#    #+#             */
-/*   Updated: 2015/12/08 09:45:13 by bgantelm         ###   ########.fr       */
+/*   Updated: 2015/12/13 15:25:21 by bgantelm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ static int	check_line(char **tmp, int *i, char **buf, char ***line)
 		*i = 1;
 	}
 	else
+	{
 		**line += ft_strlen(**line) + 1;
+	}
 	if (ft_separated(**line) == 0)
 		*i = 2;
 	ft_memdel((void **)buf);
@@ -88,10 +90,10 @@ int			get_next_line(int const fd, char **line)
 		{
 			count++;
 			buf = ft_realloc(buf, count);
-			if (buf == NULL || tmp == NULL)
-				return (-1);
 		}
 		buf[BUFF_SIZE * count + ret] = '\0';
+		if (fd == 0 && count == 0)
+			return (check_line(&tmp, &i, &buf, &line));
 	}
 	return (check_line(&tmp, &i, &buf, &line));
 }
